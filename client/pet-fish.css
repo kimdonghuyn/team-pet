@@ -1,0 +1,42 @@
+/* 🎣 낚시 and 📖 물고기 도감 (pet-fish.js): the WPF sizes and colours of server/pet.ps1 (Rod, Fight-Bar,
+   Fish-Card, Book-Draw). The book's frame is in pet.css; here is what goes in it. */
+
+/* ── in #fx: the rod, the fight bar, ripples, the leaping card ── */
+/* One window-sized SVG per rod, so its coordinates are the window's (fxAt). */
+.fish-rod { left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+.fish-sh { text-shadow: 1px 1px 3px rgba(0, 0, 0, .8); }
+/* A ripple ring: WPF Ellipse 6 × 2.4 with its 1 px stroke inside. */
+.fish-rip { width: 6px; height: 2.4px; border: 1px solid #E8F4FF; border-radius: 50%; }
+/* The fight bar is a Canvas: its children sit where they are put. */
+.fish-bar > * { position: absolute; }
+.fish-bar-bg { left: 0; top: 0; border-radius: 3px; background: rgba(30, 27, 46, .9); border: 1px solid #5E5486; }   /* #E61E1B2E */
+.fish-zone { border-left: 1.5px solid #fff; border-right: 1.5px solid #fff; }
+.fish-mark { left: 0; width: 3px; border-radius: 1px; background: #fff; border: .6px solid rgba(0, 0, 0, .53); }       /* #88000000 */
+/* The card: the fish over its name tag, a stripe in the rarity's colour, the news pills under. */
+.fish-card, .fish-card-in, .fish-leap, .fish-w { width: max-content; }
+.fish-card { pointer-events: none; }
+.fish-card-in { display: flex; flex-direction: column; align-items: center; }
+.fish-vis { display: block; }
+.fish-tag { background: rgba(30, 27, 46, .94); border-radius: 10px; padding: 2px 8px 3px; margin-top: 1px; font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; }   /* #F01E1B2E */
+.fish-stripe { height: 2px; border-radius: 1px; margin: 0 10px; align-self: stretch; }
+.fish-news { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 3px; }
+.fish-pill { border-radius: 7px; padding: 0 6px 1px; margin: 0 1.5px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+
+/* ── 📖 the book ── */
+/* pet.css gives #book-detail display: flex, which would beat hidden. */
+#book-detail[hidden] { display: none; }
+/* One tab per rarity: its name in the rarity's colour over how many I have, a 2 px line under the open one. */
+#book-tabs .fish-tab { width: 36px; margin: 0 .5px; padding: 2px 0; border-radius: 5px 5px 0 0; border-bottom: 2px solid #2E2A45; background: #221F33; text-align: center; cursor: pointer; line-height: 1.25; }
+#book-tabs .fish-tab.on { background: #3B355A; }
+#book-tabs .fish-tab b { display: block; font-size: 10.5px; font-weight: 700; }
+#book-tabs .fish-tab span { display: block; font-size: 9px; color: #CFC9E6; }
+/* The grid's cards, 43 × 35, the picked one rimmed white. */
+#book-grid .fish-cell { width: 43px; height: 35px; margin: 1px; border-radius: 6px; border: 1px solid #2E2A45; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+/* The picked one big, its words beside it. */
+#book-detail .fish-vis { flex: none; align-self: flex-start; }
+#book-detail .fish-dt { width: 144px; margin-left: 4px; color: #fff; white-space: pre-wrap; word-break: break-word; line-height: 1.3; }
+#book-detail .fish-dt b { font-size: 12.5px; }
+#book-detail .fish-dt .rar { font-size: 11px; }
+#book-detail .fish-dt div { font-size: 10.5px; color: #CFC9E6; }
+/* 🌟 A legend on the line: a golden glow round my pet (pet-fish.js aura). */
+.fish-aura { border-radius: 50%; background: radial-gradient(circle, rgba(255, 214, 102, .55) 0%, rgba(255, 201, 77, .25) 45%, rgba(255, 201, 77, 0) 70%); pointer-events: none; }

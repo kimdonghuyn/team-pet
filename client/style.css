@@ -1,0 +1,69 @@
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+  font-weight: 45 920;
+  font-display: swap;
+}
+
+:root {
+  --bg: #1e1b2e;
+  --panel: #2a2640;
+  --panel-2: #36314f;
+  --line: #3f3a5c;
+  --text: #f6f4ff;
+  --muted: #aaa3c8;
+  --accent: #7c6cf0;
+  --ok: #3dbe7a;
+  --bad: #e5484d;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+html { font-family: "Pretendard Variable", "Malgun Gothic", system-ui, sans-serif; font-size: 14px; }
+body { margin: 0; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+header { display: flex; align-items: center; gap: 16px; padding: 12px 20px; background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; }
+.brand { font-weight: 800; font-size: 18px; margin-right: auto; }
+.status { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+.dot.up { background: var(--ok); }
+.dot.down { background: var(--bad); }
+
+main { max-width: 760px; margin: 0 auto; padding: 20px 16px 48px; display: flex; flex-direction: column; gap: 14px; }
+.lead { margin: 0; color: var(--muted); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
+.card h2 { margin: 0 0 12px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.card h3 { margin: 16px 0 8px; font-size: 12px; font-weight: 800; letter-spacing: .6px; color: var(--muted); }
+.muted { color: var(--muted, #8a8aa0); }
+.small { font-size: 12px; font-weight: 400; }
+.note { margin: 8px 0 0; color: var(--muted); font-size: 13px; min-height: 1em; }
+.note.bad { color: #ff9b9b; }
+
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.grow { flex: 1; min-width: 200px; }
+.field { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+input[type=text] { font: inherit; font-size: 14px; padding: 9px 11px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); color: var(--text); min-width: 0; }
+.row > input[type=text] { flex: 1; min-width: 180px; }
+.check { display: flex; align-items: center; gap: 8px; margin: 8px 0; flex-wrap: wrap; }
+
+.btn { font: inherit; font-weight: 700; font-size: 13px; border: 0; border-radius: 10px; padding: 9px 14px; background: var(--panel-2); color: var(--text); cursor: pointer; }
+.btn:hover { filter: brightness(1.12); }
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.ghost { background: transparent; border: 1px solid var(--line); }
+.btn.on { background: var(--ok); color: #10251a; }
+
+.kinds { display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 6px; }
+.kinds button { aspect-ratio: 1; border-radius: 10px; border: 2px solid transparent; background: var(--panel-2); cursor: pointer; padding: 6px; }
+.kinds button.on { border-color: var(--accent); background: #3b355a; }
+/* A pet sheet is four 16px frames in a row: the first is its face. */
+.face { display: block; width: 100%; height: 100%; background-size: 400% 100%; background-position: 0 0; background-repeat: no-repeat; image-rendering: pixelated; }
+
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.list li { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--panel-2); border-radius: 10px; padding: 10px 12px; }
+.list li.off { opacity: .6; }
+.list .who { display: flex; flex-direction: column; gap: 2px; margin-right: auto; min-width: 0; }
+.list .name { font-weight: 700; }
+.list .title { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.code { font-family: Consolas, monospace; font-weight: 800; letter-spacing: 1px; color: var(--text); }
+.empty { color: var(--muted); font-size: 13px; background: none !important; padding: 4px 0 !important; }

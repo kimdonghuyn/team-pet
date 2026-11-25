@@ -1,0 +1,241 @@
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+  font-weight: 45 920;
+  font-display: swap;
+}
+
+/* The Windows pet's colours (server/pet.ps1 XAML), so both look the same. */
+:root {
+  --panel: rgba(30, 27, 46, .95);   /* #F21E1B2E */
+  --line: #4a4470;
+  --text: #ffffff;
+  --muted: #cfc9e6;
+  --accent: #7c6cf0;
+  --gold: #f5c542;
+  --k: 1;   /* how big the row is drawn (pet.scale) */
+  --a: 1;   /* how see-through the whole pet is (pet.petAlpha) */
+}
+
+* { box-sizing: border-box; }
+/* hidden always wins, whatever display a rule below gives the element. */
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; overflow: hidden; font-family: "Pretendard Variable", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif; font-size: 12px; color: var(--text); user-select: none; }
+/* In the Mac app the window is see-through; in a browser tab the pet sits on a soft backdrop. */
+body { background: transparent; }
+body.page { background: #2b2840; }
+input { font: inherit; }
+
+/* Everything stacks over the row, pinned at the bottom right like the Windows window
+   (WorkArea.Right - 12, Bottom - 4). --a: the whole window's see-through level. */
+#dock { position: fixed; right: 12px; bottom: 4px; display: flex; flex-direction: column; align-items: flex-end; opacity: var(--a); }
+/* Near the screen's left edge the panels hang to the right of the pet instead (pet.js fit). */
+#dock.flip { align-items: flex-start; }
+#dock.flip .slot.me .bub { align-self: flex-start !important; margin: 0 -110px 2px 0 !important; }
+#fx { position: fixed; inset: 0; pointer-events: none; overflow: hidden; opacity: var(--a); z-index: 2; }
+#dock { z-index: 1; }
+/* While I come in through the door on start, the door (in #fx) stands behind me. */
+body.flying #fx { z-index: 0; }
+#fx > * { position: absolute; }
+
+/* ── the panels: 250 wide, dark, rounded, a 2 px rim in each one's colour ── */
+.panel { width: 250px; background: var(--panel); border: 2px solid var(--accent); border-radius: 10px; padding: 10px; margin: 0 4px 3px 0; }
+#start { border-color: #f5c542; padding: 12px; }
+#party { border-color: #7c6cf0; }
+#relay { border-color: #2a9d8f; }
+#book { border-color: #5dadec; }
+#record { border-color: #e9b949; }
+#duel { border-color: #f59e0b; }
+#upd { border-color: #3fae6b; border-width: 1px; padding: 7px 10px 8px; }
+#upd-text { font-size: 12px; color: #e6f4ea; line-height: 18px; }
+#news { border-color: #2e2a42; border-width: 1px; padding: 7px 10px 8px; cursor: pointer; }
+.ptitle { font-size: 11px; font-weight: 700; white-space: pre-wrap; }
+#start-title { font-size: 14px; color: #ffe08a; }
+#party-title { color: #cfc7ff; }
+#relay-title { color: #7ee0c8; }
+#book-title { color: #9cd3ff; }
+#record-title { color: #ffd166; }
+#duel-title { color: #fcd34d; }
+#news-title { color: #9a93bd; }
+.phead { position: relative; }
+.phead .ptitle { margin-right: 26px; }
+#party-stop, #relay-stop { position: absolute; right: -4px; top: -4px; }
+.ptext { font-size: 13px; color: #fff; text-align: center; white-space: pre-wrap; margin-top: 6px; line-height: 1.35; }
+.ptext:empty { display: none; }
+.ptext.big { font-size: 14px; }
+#duel-text { font-size: 14px; }
+.pbuttons { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+.pbuttons:empty { display: none; }
+/* Panel text boxes (a word, a guess): the Windows TextBox look. */
+.pbox, #party-word, #relay-guess { display: block; width: 100%; font-size: 13px; padding: 3px 5px; margin-top: 6px; background: #2a2640; color: #fff; border: 1px solid #7c6cf0; border-radius: 0; outline: none; user-select: text; }
+#relay-guess { border-color: #2a9d8f; }
+#party-tower { width: 220px; height: 240px; margin: 6px auto 0; background: #141221; border-radius: 6px; overflow: hidden; cursor: pointer; position: relative; }
+#party-stack { position: absolute; inset: 0; }
+#relay-sheet { position: relative; width: 220px; height: 220px; margin: 6px auto 0; background: #fff; border-radius: 6px; overflow: hidden; }
+#relay-sheet canvas { position: absolute; left: 0; top: 0; }
+#relay-ink { touch-action: none; }
+#book-sum { font-size: 12px; margin-top: 4px; }
+#book-tabs { display: flex; flex-wrap: wrap; margin-top: 6px; }
+#book-detail { display: flex; margin-top: 6px; }
+#book-scroll { height: 114px; overflow-y: auto; margin-top: 6px; scrollbar-width: none; }
+#book-scroll::-webkit-scrollbar { display: none; }
+#book-grid { display: flex; flex-wrap: wrap; }
+#book-top { font-size: 11px; color: #e8e4ff; white-space: pre-wrap; margin-top: 6px; }
+#book-buttons { margin-top: 4px; }
+#record-pick { margin-top: 6px; }
+#record-pad { height: 110px; margin-top: 6px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+#record-pad-text { font-size: 16px; font-weight: 700; }
+#record-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); width: 220px; height: 220px; margin: 6px auto 0; }
+#record-top { font-size: 12px; color: #e8e4ff; white-space: pre-wrap; margin-top: 6px; padding: 2px; }
+#duel-stage { display: flex; justify-content: center; margin-top: 6px; }
+#duel-stage:empty { display: none; }
+
+/* The game panels' buttons: rounded, no chrome; lighter under the mouse, dimmer pressed or off. */
+.btn { font: inherit; font-size: 13px; border: 0; border-radius: 9px; padding: 5px 12px; margin: 3px; background: #3b355a; color: #fff; cursor: pointer; }
+.btn:hover { opacity: .85; }
+.btn:active { opacity: .7; }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.hot { background: #3b7dd8; }
+
+/* ── 👋 the first run ── */
+.stext { font-size: 11px; color: #cfc9e6; white-space: pre-wrap; margin: 6px 0 2px; line-height: 1.4; }
+.stext.label { color: #9cd3ff; font-weight: 700; }
+.stext.note { color: #ffb3ad; min-height: 1em; }
+.stext.note.ok { color: #cfc9e6; }
+.sbox { display: block; width: 100%; font-size: 13px; padding: 3px 5px; background: #2a2640; color: #fff; border: 1px solid #7c6cf0; outline: none; user-select: text; }
+.srow { display: flex; flex-wrap: wrap; justify-content: center; }
+.ways { display: flex; justify-content: center; margin-top: 6px; }
+.kinds { display: flex; flex-wrap: wrap; margin-top: 2px; }
+.kinds .kind { width: 36px; height: 36px; margin: 1px; border-radius: 6px; border: 2px solid #221f33; background: #221f33; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.kinds .kind.on { border-color: #f5c542; background: #3b355a; }
+.kinds .face { width: 26px; height: 26px; background-size: 400% 100%; background-repeat: no-repeat; image-rendering: pixelated; }
+.room { background: #2a2640; border-radius: 8px; padding: 6px 8px 8px; margin-top: 6px; }
+.room b { display: block; font-size: 12px; }
+.room .code { font-family: Menlo, Consolas, monospace; font-size: 16px; font-weight: 800; color: #ffd166; letter-spacing: 1px; }
+.room .code.old { color: #9a93bd; }
+.room .srow { justify-content: flex-start; margin-top: 4px; }
+.room.here { border: 1px solid #f5c542; }
+.room b.go { cursor: pointer; color: #9cd3ff; }
+.room b.go:hover { text-decoration: underline; }
+
+/* ── 💬 the chat box ── */
+#chat { margin: 0 4px 3px 0; display: flex; flex-direction: column; align-items: flex-end; }
+#chatbox { position: relative; width: 250px; background: rgba(30, 27, 46, .95); border-radius: 10px; padding: 8px; }
+#chatbox.note { background: rgba(42, 34, 62, .95); }
+#linesbox { height: 160px; overflow-y: auto; margin-bottom: 6px; scrollbar-width: none; }
+#linesbox::-webkit-scrollbar { display: none; }
+.line { font-size: 12px; color: #f1eefc; margin-bottom: 3px; line-height: 1.35; word-break: break-word; white-space: pre-wrap; user-select: text; }
+.line b { font-size: 11px; font-weight: 700; color: #b3a6ff; margin-right: 6px; }
+.line.mine b { color: #7fdca4; }
+.line.called { color: #ffd84d; font-weight: 600; }
+.line .tag, .bub .tag { display: inline-block; padding: 0 5px; border-radius: 8px; background: rgba(245, 158, 11, .22); color: #ffc44d; font-weight: 700; }
+.bub .tag { background: rgba(245, 158, 11, .18); color: #b45309; }
+.line.in { color: #ddd2ff; }
+.line img, .pic { display: block; max-height: 110px; margin: 2px 0 4px; cursor: pointer; }
+#target { font-size: 11px; color: #cfc7ff; margin-bottom: 4px; white-space: pre-wrap; }
+#target.warn { color: #ffb3ad; }
+#target.armed { color: #ffd84d; }
+#pend { position: relative; display: inline-block; margin-bottom: 4px; }
+#pend .pframe { display: inline-block; border: 1px solid #7c6cf0; border-radius: 6px; padding: 2px; }
+#pend img { display: block; max-height: 72px; max-width: 200px; }
+#pend-x { position: absolute; right: -5px; top: -5px; width: 16px; height: 16px; border-radius: 8px; background: rgba(30, 27, 46, .9); color: #fff; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.inwrap { position: relative; }
+#input { width: 100%; font-size: 12px; padding: 3px 5px; background: #2a2640; color: #fff; border: 1px solid #4a4470; outline: none; user-select: text; border-radius: 0; }
+#chatbox.note #input { background: #33294d; border-color: #5e5486; }
+#hint, #shade { position: absolute; left: 0; right: 0; top: 0; bottom: 0; padding: 4px 6px 4px 8px; pointer-events: none; white-space: nowrap; overflow: hidden; }
+#hint { font-size: 11px; color: #8f86b8; display: flex; align-items: center; }
+#shade { font-size: 12px; color: transparent; }
+#shade .at { color: #9fe6cf; background: #2a2640; }
+#chatbox.note #shade .at { background: #33294d; }
+/* The size chip at the top left, the ◐ at the top right: faint until the mouse comes. */
+#chatgrip, #chatalpha .chip { width: 18px; height: 18px; border-radius: 9px; background: rgba(30, 27, 46, .9); border: 1px solid #4a4470; color: #cfc9e6; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+#chatgrip { position: absolute; left: -6px; top: -6px; opacity: .35; cursor: nwse-resize; }
+#chatgrip:hover, #chatgrip.held { opacity: 1; }
+#chatalpha { position: absolute; right: -6px; top: -6px; display: flex; align-items: center; border-radius: 9px; opacity: .35; }
+#chatalpha .chip { font-size: 10px; }
+#chatalpha:hover, #chatalpha.held { opacity: 1; background: rgba(24, 22, 38, .95); }
+#chatalpha .bar { display: flex; align-items: center; margin: 0 2px 0 10px; }
+#chatalpha .bar[hidden] { display: none; }
+#chatalpha .bar input { width: 80px; }
+/* The tabs hang from the box's bottom edge: the open one in the box's colour, the other darker. */
+#tabs { display: flex; align-self: flex-start; margin-left: 12px; }
+.tab { font-size: 11px; border-radius: 0 0 8px 8px; padding: 3px 10px 5px; margin-right: 3px; cursor: pointer; background: rgba(19, 17, 32, .95); color: #8f86b8; white-space: nowrap; }
+.tab.on { background: rgba(30, 27, 46, .95); color: #f1eefc; font-weight: 700; }
+.tab.on.note { background: rgba(42, 34, 62, .95); }
+.tab .x { font-size: 10px; margin-left: 6px; }
+
+/* ── 📦 update notes ── */
+#news-x { position: absolute; right: 0; top: 0; font-size: 11px; color: #7d769e; padding: 0 0 4px 6px; }
+#news-text { font-size: 12px; color: #cfc9e6; margin-top: 4px; line-height: 18px; white-space: pre-wrap; }
+#news-list { margin-top: 2px; }
+#news-list div { font-size: 12px; color: #cfc9e6; white-space: pre-wrap; }
+#news-list .date { color: #8f86b8; margin-top: 6px; }
+#news-list .fold { color: #7d769e; margin-top: 7px; }
+
+/* ── the row of animals ── */
+/* Room on the left (not zoomed, like the Windows Row's margin) for the first friend's bubble and the grip. */
+#rowbox { position: relative; padding-left: 70px; }
+/* --k: the whole row (pets, names, bubbles, doors) zooms as one. */
+#row { display: flex; align-items: flex-end; zoom: var(--k); }
+.grp { display: flex; flex-direction: column; align-items: center; margin: 0 5px 0 3px; }
+.grp .grow { display: flex; align-items: flex-end; }
+.grp .bar { height: 3px; border-radius: 1.5px; align-self: stretch; margin: 1px 4px 0; }
+.grp .fl { font-size: 10px; max-width: 90px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+.slot { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; position: relative; }
+.slot .g { position: relative; display: flex; align-items: flex-end; justify-content: center; cursor: pointer; }
+.slot .g.held { cursor: grabbing; }
+.slot .img { background-size: 400% 100%; background-position: 0 0; background-repeat: no-repeat; image-rendering: pixelated; transform-origin: 50% 100%; }
+.slot .nm { font-size: 10px; color: #fff; max-width: 90px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 3px #000, 0 0 3px #000; pointer-events: none; }
+.slot .dot, .slot .mark { position: absolute; top: 0; border-radius: 50%; border: 1.5px solid #fff; }
+.slot .dot { right: 0; width: 10px; height: 10px; background: #e0605a; }
+.slot .mark { left: 0; width: 12px; height: 12px; background: #f5c542; }
+/* The bubble: white, the name on its own small violet line, hanging out over the neighbours. */
+.bub { max-width: 180px; width: max-content; background: rgba(255, 255, 255, .97); color: #2a2340; border: 1px solid rgba(0, 0, 0, .19); border-radius: 9px; padding: 4px 7px; font-size: 12px; line-height: 1.35; margin-bottom: 2px; word-break: break-word; white-space: pre-wrap; }
+.bub b { display: block; font-size: 10.5px; color: #6c5ce7; }
+.bub img { display: block; max-width: 150px; max-height: 90px; margin-top: 3px; }
+.bub.called { background: #fff4c2; border: 2px solid #f59e0b; }
+.bub.note { background: #ede7ff; border: 2px solid #8b5cf6; }
+.bub.open { cursor: pointer; }
+/* The size grip by the first pet: all but gone until the mouse is over the pet. */
+#grip { position: absolute; left: 48px; bottom: 20px; width: 22px; height: 22px; border-radius: 11px; background: rgba(30, 27, 46, .9); border: 1px solid #7c6cf0; color: #fff; font-size: 13px; display: flex; align-items: center; justify-content: center; opacity: .02; cursor: nwse-resize; }
+#dock:hover #grip, #grip.held { opacity: 1; }
+/* A door for whoever comes or goes (doorEl). */
+.door { position: absolute; width: 44px; height: 60px; background: #6b3f1f; border-radius: 20px 20px 2px 2px; padding: 4px 4px 0; transform-origin: 50% 100%; }
+.door .light { position: absolute; inset: 4px 4px 0; background: #ffd98a; border-radius: 16px 16px 0 0; }
+.door .leaf { position: absolute; inset: 4px 4px 0; background: #c9773a; border: 1.5px solid #8a4b22; border-radius: 16px 16px 0 0; transform-origin: 0 50%; }
+.door .knob { position: absolute; right: 5px; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: #ffe066; }
+
+#off { background: var(--panel); border-radius: 10px; padding: 8px 12px; color: var(--muted); margin: 0 4px 3px 0; }
+
+/* ── the right-click menu: the panels' dark rounded look ── */
+#menu { position: fixed; z-index: 10; }
+.mbox { position: relative; background: rgba(30, 27, 46, .96); border: 1px solid #2e2a42; border-radius: 10px; padding: 4px; box-shadow: 2px 2px 8px rgba(0, 0, 0, .5); font-size: 12px; color: #cfc9e6; }
+/* The tail under the menu, pointing at the pet it was opened on. */
+#menu > .mbox > .caret { position: absolute; bottom: -7px; width: 12px; height: 12px; background: rgba(30, 27, 46, .96); border-right: 1px solid #2e2a42; border-bottom: 1px solid #2e2a42; transform: rotate(45deg); }
+.mi { position: relative; display: grid; grid-template-columns: 18px 1fr auto; align-items: center; min-width: 170px; padding: 5px 10px 5px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+.mi:hover, .mi.open { background: #2a2640; }
+.mi .ck { color: #8fb8a3; font-weight: 700; visibility: hidden; }
+.mi.checked .ck { visibility: visible; }
+.mi .ar { color: #7d769e; font-size: 14px; margin: -2px 0 0 14px; }
+.mi.off { opacity: .45; pointer-events: none; }
+.mhead { color: #7d769e; font-size: 11px; font-weight: 700; margin: 6px 10px 2px; }
+.msep { height: 1px; margin: 4px 8px; background: #2a2640; }
+.msub { position: absolute; left: calc(100% + 6px); top: -9px; display: none; }
+.mi.open > .msub { display: block; }
+.msub.left { left: auto; right: calc(100% + 6px); }
+.mkinds { width: 194px; padding: 2px 2px 4px; margin: 0; }
+.mkinds .kind { width: 34px; height: 34px; }
+.mkinds .kind.on { border-color: #f5c542; background: #3b355a; }
+.mfoot { display: flex; align-items: center; background: #15131f; border-radius: 7px; padding: 5px 8px 5px 10px; margin-top: 2px; }
+.mfoot .ic { color: #8f86b8; font-size: 12px; margin-right: 8px; }
+.mfoot input { width: 120px; }
+.pct { width: 40px; margin-left: 8px; font-size: 11px; color: #9a93bd; }
+/* The see-through bar: a thin dark track, the filled part soft violet, a small round knob. */
+input[type=range] { -webkit-appearance: none; appearance: none; height: 18px; margin: 0; background: transparent; cursor: pointer; --fill: 100%; }
+input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(to right, #5e5486 var(--fill), #2a2640 var(--fill)); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -4px; border-radius: 50%; background: #b9b2d6; border: 0; }
+
+/* ── 🎆 effects helpers shared by the modules ── */
+.fxt { font-weight: 700; white-space: nowrap; font-family: "Apple Symbols", "Segoe UI Symbol", "Pretendard Variable", "Apple SD Gothic Neo", sans-serif; line-height: 1; }
+.fxdot { border-radius: 50%; }
+.sprite { background-size: 400% 100%; background-position: 0 0; background-repeat: no-repeat; image-rendering: pixelated; transform-origin: 50% 100%; }

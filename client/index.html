@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>팀 펫</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="logo">🐾</span> 팀 펫</div>
+    <span class="status"><span id="conn" class="dot"></span><span id="conn-label">확인 중…</span></span>
+    <button id="quiet" class="btn" type="button" title="누르면 이 PC 에 윈도우 알림이 뜨지 않습니다 (펫은 그대로)">🔔 알림</button>
+  </header>
+  <main>
+    <p class="lead">대화 · 쪽지 · 게임 · 낚시는 바탕화면 <b>펫</b>에서 합니다. 이 화면은 처음 설정과 관리용입니다.</p>
+
+    <!-- A member PC with no floor yet: a name and the join code are all it takes. -->
+    <section id="welcome" class="card" hidden>
+      <h2>👋 팀 펫 시작하기</h2>
+      <p class="muted">방장에게 받은 <b>참가 링크</b>를 붙여 넣으면 그 방의 펫 대화에 바로 들어갑니다.</p>
+      <form id="welcome-form" class="stack">
+        <label class="field">대화에 보일 내 이름 <input id="welcome-name" type="text" maxlength="30" autocomplete="off" required></label>
+        <label class="field">참가 링크 <input id="welcome-code" type="text" maxlength="200" placeholder="http://…/?code=… (받은 링크를 통째로)" autocomplete="off" spellcheck="false" required></label>
+        <button class="btn primary" type="submit">들어가기</button>
+        <p id="welcome-note" class="note"></p>
+      </form>
+    </section>
+
+    <section id="pet" class="card" hidden>
+      <h2>🐾 내 펫</h2>
+      <div class="row">
+        <button id="pet-on" class="btn primary" type="button">펫 띄우기</button>
+        <span class="muted small">작업표시줄 위에 작게 떠서 같은 층 대화를 보여 줍니다. 펫을 끌어서 옮기고, 오른쪽 클릭으로 게임·낚시·숨기기를 엽니다.</span>
+      </div>
+      <h3>동물</h3>
+      <div id="pet-kinds" class="kinds" role="group" aria-label="동물"></div>
+      <label class="check"><input id="pet-bubbles" type="checkbox"> 말풍선으로 보기 <small class="muted">끄면 새 대화가 와도 빨간 점만 — 조용히 쓸 때</small></label>
+      <label class="check"><input id="pet-fx" type="checkbox"> 남이 쓴 채팅 효과 끄기 <small class="muted">/폭죽 · /춤 같은 효과를 이 PC 에서만 안 보이게</small></label>
+      <p id="pet-note" class="note"></p>
+    </section>
+
+    <section id="me" class="card" hidden>
+      <h2>🙂 나</h2>
+      <form id="name-form" class="row">
+        <label class="field grow">대화에 보일 내 이름 <input id="my-name" type="text" maxlength="30" autocomplete="off"></label>
+        <button class="btn" type="submit">저장</button>
+      </form>
+      <div class="row">
+        <button id="hide" class="btn" type="button"></button>
+        <span id="hide-line" class="muted small"></span>
+      </div>
+      <p id="me-note" class="note"></p>
+    </section>
+
+    <!-- A member PC: the floors (hubs) it is on. -->
+    <section id="links" class="card" hidden>
+      <h2>💬 내가 들어간 층</h2>
+      <ul id="link-list" class="list"></ul>
+      <form id="join-form" class="row">
+        <input id="join-code" type="text" maxlength="200" placeholder="다른 방의 참가 링크 (같은 방장의 방이면 코드만)" autocomplete="off" spellcheck="false">
+        <button class="btn primary" type="submit">층 들어가기</button>
+      </form>
+      <p id="join-note" class="note"></p>
+    </section>
+
+    <!-- The hub PC: its floors, their join codes, and who is connected. -->
+    <section id="floors" class="card" hidden>
+      <h2>🏢 층 관리 <span class="muted small">이 PC 가 허브입니다</span></h2>
+      <ul id="floor-list" class="list"></ul>
+      <form id="new-floor" class="row">
+        <input id="new-floor-name" type="text" maxlength="30" placeholder="새 층 이름 (예: 디자인팀)" autocomplete="off">
+        <button class="btn primary" type="submit">+ 새 층</button>
+      </form>
+      <p id="floor-note" class="note"></p>
+      <h3>팀원 <span id="roster-sum" class="muted small"></span></h3>
+      <ul id="roster" class="list"></ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

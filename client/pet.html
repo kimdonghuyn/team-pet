@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>팀 펫</title>
+  <link rel="stylesheet" href="pet.css">
+  <link rel="stylesheet" href="pet-fx.css">
+  <link rel="stylesheet" href="pet-fish.css">
+  <link rel="stylesheet" href="pet-games.css">
+</head>
+<body>
+  <!-- The same window as server/pet.ps1 on Windows: the panels stack over the row of animals, all
+       held to the bottom right. Each panel is one of the Windows pet's Borders, in the same order. -->
+  <div id="dock">
+    <!-- 👋 시작하기 · 🔑 다른 방 · 🏠 첫 방 · 📋 참가 코드 (see openStart). -->
+    <section id="start" class="panel" hidden>
+      <div class="ptitle" id="start-title"></div>
+      <div id="start-body"></div>
+    </section>
+    <!-- 🎲 같이 하기: 🏗 높이 쌓기 · 💣 폭탄 돌리기 · 🔤 끝말잇기 · 🕵️ 라이어 (pet-games.js showParty). -->
+    <section id="party" class="panel" hidden>
+      <div class="phead"><div class="ptitle" id="party-title"></div><div id="party-stop"></div></div>
+      <div id="party-tower" hidden><div id="party-stack"></div></div>
+      <div id="party-stage" class="ptext big"></div>
+      <div id="party-text" class="ptext"></div>
+      <input id="party-word" type="text" hidden autocomplete="off">
+      <div id="party-buttons" class="pbuttons"></div>
+    </section>
+    <!-- 🎨 이어 그리기 · 🖍 캐치마인드 (pet-games.js showRelay). -->
+    <section id="relay" class="panel" hidden>
+      <div class="phead"><div class="ptitle" id="relay-title"></div><div id="relay-stop"></div></div>
+      <div id="relay-text" class="ptext"></div>
+      <div id="relay-sheet" hidden><canvas id="relay-past" width="220" height="220"></canvas><canvas id="relay-ink" width="220" height="220"></canvas></div>
+      <input id="relay-guess" type="text" hidden autocomplete="off">
+      <div id="relay-buttons" class="pbuttons"></div>
+    </section>
+    <!-- 📖 물고기 도감 (pet-fish.js bookDraw). -->
+    <section id="book" class="panel" hidden>
+      <div class="ptitle" id="book-title"></div>
+      <div id="book-sum"></div>
+      <div id="book-tabs"></div>
+      <div id="book-detail" hidden></div>
+      <div id="book-scroll" title="휠로 넘겨 보세요"><div id="book-grid"></div></div>
+      <div id="book-top"></div>
+      <div id="book-buttons" class="pbuttons"></div>
+    </section>
+    <!-- 🏆 기록 도전 (pet-games.js recordIdle). -->
+    <section id="record" class="panel" hidden>
+      <div class="ptitle" id="record-title"></div>
+      <div id="record-pick" class="pbuttons"></div>
+      <div id="record-pad" hidden><div id="record-pad-text"></div></div>
+      <div id="record-grid" hidden></div>
+      <div id="record-text" class="ptext"></div>
+      <div id="record-top"></div>
+      <div id="record-buttons" class="pbuttons"></div>
+    </section>
+    <!-- ⚔️ 대결 (pet-games.js showDuel). -->
+    <section id="duel" class="panel" hidden>
+      <div class="ptitle" id="duel-title"></div>
+      <div id="duel-stage"></div>
+      <div id="duel-text" class="ptext big"></div>
+      <div id="duel-buttons" class="pbuttons"></div>
+    </section>
+    <!-- The chat keeps its own size and see-through level (chatSize): drag the chip at its top left
+         (up-left bigger); the lines scroll. The tabs under it say where Enter goes. -->
+    <div id="chat" hidden>
+      <div id="chatbox">
+        <div id="chatbody">
+          <div id="linesbox"><div id="lines"></div></div>
+          <div id="target" hidden></div>
+          <div id="pend" hidden><span class="pframe"><img id="pend-img" alt=""></span><span id="pend-x" title="빼기 (Esc)">✕</span></div>
+          <div class="inwrap">
+            <input id="input" type="text" maxlength="200" autocomplete="off">
+            <div id="hint"></div>
+            <div id="shade" hidden></div>
+          </div>
+        </div>
+        <div id="chatgrip" title="끌어서 대화창 크기 조절 (진하기는 오른쪽 위 ◐)">⤡</div>
+        <div id="chatalpha" title="대화창 진하기"><div class="bar" hidden><input type="range" min="30" max="100"><span class="pct"></span></div><span class="chip">◐</span></div>
+      </div>
+      <div id="tabs"></div>
+    </div>
+    <!-- 📦 What the update just installed changed (showNews). -->
+    <!-- 🆕 A newer release (server/release-update.js, see showUpdate in pet.js). -->
+    <section id="upd" class="panel" hidden>
+      <div id="upd-text"></div>
+      <div id="upd-buttons" class="pbuttons"></div>
+    </section>
+    <section id="news" class="panel" hidden>
+      <div class="phead"><div class="ptitle" id="news-title"></div><span id="news-x" title="닫기 (다시 안 뜹니다)">✕</span></div>
+      <div id="news-text"></div>
+      <div id="news-list" hidden></div>
+    </section>
+    <!-- Room on the left for the first friend's bubble; the grip sits by the first pet (drag to resize). -->
+    <div id="rowbox">
+      <div id="row"></div>
+      <div id="grip" title="끌어서 크기 조절 (펫 위에서 Ctrl+휠도 됩니다)">⤡</div>
+    </div>
+    <div id="off" hidden>팀 펫이 꺼져 있어요 — 다시 켜는 중…</div>
+  </div>
+  <div id="menu" hidden></div>
+  <!-- 🎆 Chat effects, doors and fishing are drawn over everything here, letting clicks through. -->
+  <div id="fx"></div>
+  <script src="pet.js"></script>
+  <script src="pet-fx.js"></script>
+  <script src="pet-fish.js"></script>
+  <script src="pet-games.js"></script>
+  <script src="pet-smack.js"></script>
+  <script src="pet-snow.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{
+  "name": "team-pet",
+  "version": "0.6.0",
+  "description": "작업표시줄 위의 작은 동물들로 대화하는 바탕화면 팀 메신저 — 대화 · 쪽지 · 게임 · 낚시",
+  "type": "module",
+  "private": true,
+  "main": "mac/main.cjs",
+  "bin": {
+    "team-pet": "server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "hub": "node server/index.js --hub",
+    "test": "node --test test/*.test.js",
+    "pack": "node scripts/pack.js",
+    "mac": "electron .",
+    "pack:mac": "electron-builder --mac --publish never"
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "kr.teampet.app",
+    "productName": "TeamPet",
+    "asar": false,
+    "directories": {
+      "output": "dist-mac"
+    },
+    "files": [
+      "client/**",
+      "server/**",
+      "!server/pet.ps1",
+      "scripts/make-pets.js",
+      "scripts/autostart.js",
+      "mac/**",
+      "package.json",
+      "LICENSE"
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "TeamPet-mac-${arch}.${ext}",
+      "category": "public.app-category.social-networking",
+      "icon": "mac/icon.png",
+      "identity": null,
+      "extendInfo": {
+        "LSUIElement": true,
+        "NSLocalNetworkUsageDescription": "같은 네트워크에 있는 팀원의 PC(방)에 연결해 대화하고 같이 놀기 위해 필요해요."
+      }
+    },
+    "afterPack": "mac/adhoc-sign.cjs"
+  },
+  "license": "MIT"
+}

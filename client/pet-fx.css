@@ -1,0 +1,11 @@
+/* 🎆 Chat effects (pet-fx.js): the dance and brag stages, the umbrellas. Everything sits in #fx. */
+.fx-stage { left: 0; top: 0; }
+.fx-stage > * { position: absolute; }
+.fx-board { height: 8px; border-radius: 4px; border: 1px solid; box-sizing: border-box; }
+.fx-dancer div { position: absolute; left: 0; top: 0; }
+.fx-umb { overflow: visible; }
+/* 🛸 The UFO (pet-fx.js ufo): a pixel saucer with a wobble, and its beam down to the ground. */
+.fx-ufo .wob { position: relative; width: 100%; height: 100%; }
+.fx-ufo svg { display: block; position: relative; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35)); }
+.fx-ufo .beam { position: absolute; transform-origin: 50% 0; clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%); background: linear-gradient(rgba(126, 224, 200, .55), rgba(126, 224, 200, .18)); animation: fx-beam .35s ease-in-out infinite alternate; }
+@keyframes fx-beam { from { opacity: .75; } to { opacity: 1; } }

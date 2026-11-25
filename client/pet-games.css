@@ -1,0 +1,31 @@
+/* The game panels (pet-games.js), with the Windows pet's values (server/pet.ps1 XAML). The panels
+   themselves are laid out in pet.css; this is what their games put inside. */
+
+/* pet.css gives these a display of their own, which would win over the browser's [hidden]. */
+#party-word[hidden], #relay-guess[hidden], #record-pad[hidden], #record-grid[hidden] { display: none; }
+
+/* The Windows game buttons are Padding 10,4; the core's .btn is a touch wider. */
+#duel-buttons .btn, #relay-buttons .btn, #party-buttons .btn, #record-buttons .btn { padding: 4px 10px; }
+
+/* ⚔️ the stage: the names and the two 🤠 (or the 🔫) side by side, spaces kept (Stage-Text). */
+#duel-stage { align-items: center; }
+#duel-stage .game-stage { margin: 0 4px; white-space: pre; line-height: 1.2; }
+
+/* ✕ to stop a game for everyone at the table: small, red once it asks "끝낼까요?" (Stop-Button). */
+.game-stop { font-size: 11px; padding: 2px 6px; }
+
+/* 🖍 the host's two settings before the start: a label and small pills, the picked one coloured (Pick-Row). */
+.game-pills { display: flex; align-items: center; width: 226px; margin: 2px 0; }
+.game-pills .game-label { width: 54px; font-size: 11px; color: #9c95c9; }
+.game-pills .btn { width: 36px; padding: 3px 0; margin: 2px; font-size: 12px; }
+
+/* 🎨 the sheet takes the pen only on my turn. */
+#relay-ink.game-on { cursor: crosshair; }
+
+/* 🏗 one storey of the tower on the 220 × 240 floor (Brick). */
+.game-brick { position: absolute; height: 13px; border-radius: 2px; }
+
+/* 🏆 the choice of game as small pills; the 5 × 5 grid's numbers fill their cells (Record-Idle, Record-Play). */
+#record-pick .btn { font-size: 11px; padding: 3px 6px; margin: 2px; }
+#record-grid .btn { padding: 0; margin: 2px; font-size: 14px; font-weight: 700; }
+#record-pad-text { color: #fff; }

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>팀 펫 초대</title>
+  <!-- The invite page: a teammate opened the room's link in a browser. The hub fills in the title
+       (who invites to which room), why (empty when the code still works), link and releases
+       (server/index.js invitePage); the placeholders are the double-braced names below. -->
+  <style>
+    :root { --bg: #1e1b2e; --panel: #2a2640; --line: #4a4470; --text: #fff; --muted: #cfc9e6; --accent: #7c6cf0; --gold: #f5c542; }
+    * { box-sizing: border-box; }
+    html { font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Pretendard Variable", system-ui, sans-serif; font-size: 15px; }
+    body { margin: 0; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; padding: 32px 16px; }
+    main { width: 100%; max-width: 520px; }
+    h1 { font-size: 22px; margin: 0 0 6px; line-height: 1.35; }
+    h1 .room { color: var(--gold); }
+    .lead { color: var(--muted); margin: 0 0 22px; line-height: 1.5; }
+    .why { background: #3b2a2a; border: 1px solid #a05050; border-radius: 10px; padding: 10px 14px; margin: 0 0 18px; color: #ffb3ad; }
+    .why:empty { display: none; }
+    section { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
+    section h2 { font-size: 15px; margin: 0 0 10px; color: #9cd3ff; }
+    section h2 .n { display: inline-block; width: 22px; height: 22px; border-radius: 11px; background: var(--accent); color: #fff; text-align: center; line-height: 22px; font-size: 13px; margin-right: 8px; }
+    .dl { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+    .btn { display: inline-block; font: inherit; font-size: 14px; font-weight: 700; border: 0; border-radius: 9px; padding: 9px 14px; background: #3b355a; color: #fff; text-decoration: none; cursor: pointer; }
+    .btn:hover { opacity: .88; }
+    .btn.hot { background: #3b7dd8; }
+    .btn.hot::after { content: ' · 내 컴퓨터'; font-weight: 400; opacity: .8; }
+    .small { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 6px 0 0; }
+    .small a { color: #9cd3ff; }
+    .copy { display: flex; gap: 8px; margin-top: 4px; }
+    .copy input { flex: 1; min-width: 0; font: inherit; font-size: 13px; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--accent); background: #1e1b2e; color: #fff; }
+    .ok { color: #7ee0c8; font-size: 13px; min-height: 1.2em; margin-top: 6px; }
+    .pets { display: flex; gap: 6px; margin: 0 0 18px; }
+    .pets span { width: 40px; height: 40px; background-size: 400% 100%; background-repeat: no-repeat; image-rendering: pixelated; }
+    footer { color: #8f86b8; font-size: 12px; text-align: center; margin-top: 18px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="pets"><span style="background-image:url('assets/pets/cat.png')"></span><span style="background-image:url('assets/pets/dog.png')"></span><span style="background-image:url('assets/pets/rabbit.png')"></span><span style="background-image:url('assets/pets/penguin.png')"></span><span style="background-image:url('assets/pets/fox.png')"></span></div>
+    <h1>🐾 {{title}}</h1>
+    <p class="lead">팀 펫은 작업표시줄 위에 작은 동물들이 앉아 있는 팀 메신저예요. 같은 방 사람마다 동물이 한 마리씩 있고, 누가 말하면 그 동물 위에 말풍선이 떠요.</p>
+    <p class="why">{{why}}</p>
+    <section>
+      <h2><span class="n">1</span>참가 링크 복사</h2>
+      <div class="copy"><input id="link" type="text" readonly value="{{link}}"><button class="btn hot" id="copy" type="button">복사</button></div>
+      <p class="ok" id="ok"></p>
+      <p class="small"><b>이미 팀 펫이 있다면</b> 펫을 오른쪽 클릭 → <b>🚪 방 이동</b> → <b>🔗 참가 링크로 새 방 들어가기</b>에 붙여 넣으면 끝이에요.</p>
+    </section>
+    <section>
+      <h2><span class="n">2</span>팀 펫이 없다면 설치</h2>
+      <div class="dl">
+        <a class="btn" data-os="mac-arm" href="{{releases}}/TeamPet-mac-arm64.dmg">맥 (Apple 칩)</a>
+        <a class="btn" data-os="mac-intel" href="{{releases}}/TeamPet-mac-x64.dmg">맥 (Intel)</a>
+        <a class="btn" data-os="win" href="{{releases}}/TeamPet-Setup.exe">윈도우</a>
+      </div>
+      <p class="small">설치하면 펫이 떠서 이름과 동물을 묻고, 복사해 둔 링크는 알아서 채워 둬요. 맥은 처음 열 때 <b>오른쪽 클릭 → 열기</b>가 한 번 필요해요. 윈도우에서 설치 파일이 막히면 <a href="{{releases}}/TeamPet-Portable.zip">압축판</a>을 풀어 <code>setup.cmd</code>를 실행하세요. 관리자 권한은 필요 없어요.</p>
+    </section>
+    <footer>이 링크는 사내 네트워크 안에서, 방장 PC가 켜져 있을 때 열려요. 대화는 방장 PC 메모리에만 있고 어디에도 저장되지 않아요.</footer>
+  </main>
+  <script>
+    // The visitor's own computer first.
+    const ua = navigator.userAgent, mac = /Macintosh/.test(ua), win = /Windows/.test(ua);
+    const arm = mac && (navigator.userAgentData?.architecture === 'arm' || /\bARM\b/i.test(ua));
+    const hot = win ? 'win' : mac ? (arm ? 'mac-arm' : 'mac-arm') : null;
+    if (hot) document.querySelector(`[data-os="${hot}"]`).classList.add('hot');
+    // Copy works on plain http here only the old way: select and copy.
+    document.getElementById('copy').onclick = async () => {
+      const box = document.getElementById('link');
+      box.select(); box.setSelectionRange(0, 9999);
+      let done = false;
+      try { await navigator.clipboard.writeText(box.value); done = true; } catch { done = document.execCommand('copy'); }
+      document.getElementById('ok').textContent = done ? '복사했어요! 설치한 뒤 펫이 뜨면 붙여 넣으세요.' : '복사가 안 되면 위 링크를 직접 선택해 복사하세요.';
+    };
+  </script>
+</body>
+</html>

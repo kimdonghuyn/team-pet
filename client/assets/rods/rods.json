@@ -1,0 +1,151 @@
+{
+ "frames": 12,
+ "step": 200,
+ "w": 250,
+ "h": 190,
+ "hand": [
+  168,
+  140
+ ],
+ "tip": [
+  58,
+  34
+ ],
+ "rods": [
+  {
+   "name": "🪵 초보 낚싯대",
+   "line": "#DDE6F2",
+   "bob": [
+    "#E5484D",
+    "#F2F2F2"
+   ],
+   "sky": false
+  },
+  {
+   "name": "🎋 청죽",
+   "line": "#DDE6F2",
+   "bob": [
+    "#E5484D",
+    "#F2F2F2"
+   ],
+   "sky": false
+  },
+  {
+   "name": "🪶 바람깃",
+   "line": "#E8EEF8",
+   "bob": [
+    "#5B8DEF",
+    "#FFFFFF"
+   ],
+   "sky": false
+  },
+  {
+   "name": "⚓ 강철 닻",
+   "line": "#C8D0DA",
+   "bob": [
+    "#E5484D",
+    "#F2F2F2"
+   ],
+   "sky": false
+  },
+  {
+   "name": "🌊 심해 카본",
+   "line": "#9FD8FF",
+   "bob": [
+    "#4FC3F7",
+    "#E8F8FF"
+   ],
+   "sky": false
+  },
+  {
+   "name": "🍃 비취 용골",
+   "line": "#CFFFF0",
+   "bob": [
+    "#2EA886",
+    "#E6FFF6"
+   ],
+   "sky": false
+  },
+  {
+   "name": "❄️ 빙결",
+   "line": "#E6F6FF",
+   "bob": [
+    "#7FC8EF",
+    "#FFFFFF"
+   ],
+   "sky": false
+  },
+  {
+   "name": "🔥 불꽃 단조",
+   "line": "#FFC27A",
+   "bob": [
+    "#FF7A2A",
+    "#FFF2E0"
+   ],
+   "sky": false
+  },
+  {
+   "name": "🌙 월광",
+   "line": "#EEF3FF",
+   "bob": [
+    "#B8C4FF",
+    "#FFFFFF"
+   ],
+   "sky": false
+  },
+  {
+   "name": "☀️ 태양의 금장",
+   "line": "#FFE08A",
+   "bob": [
+    "#F2C94C",
+    "#FFF8E1"
+   ],
+   "sky": true
+  },
+  {
+   "name": "⚡ 뇌전",
+   "line": "#CFE0FF",
+   "bob": [
+    "#5A8AFF",
+    "#EEF4FF"
+   ],
+   "sky": true
+  },
+  {
+   "name": "💎 수정 결정",
+   "line": "#E9DCFF",
+   "bob": [
+    "#B48CF0",
+    "#F6F0FF"
+   ],
+   "sky": true
+  },
+  {
+   "name": "🌈 오로라",
+   "line": "#9FF0D0",
+   "bob": [
+    "#FF6B6B",
+    "#FFFFFF"
+   ],
+   "sky": true
+  },
+  {
+   "name": "🌌 은하수",
+   "line": "#D8C8FF",
+   "bob": [
+    "#B48CF0",
+    "#F6F0FF"
+   ],
+   "sky": true
+  },
+  {
+   "name": "🐉 흑룡의 숨결",
+   "line": "#FFB070",
+   "bob": [
+    "#FF5A2A",
+    "#E0A83A"
+   ],
+   "sky": true
+  }
+ ]
+}

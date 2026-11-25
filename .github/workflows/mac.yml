@@ -1,0 +1,64 @@
+# 릴리스를 만든다: 맥 앱은 맥 빌드 서버에서, Windows 설치 파일과 자동 업데이트 묶음은 Windows 빌드 서버에서.
+# v* 태그를 올리거나, Actions 탭에서 태그를 적어 직접 돌린다.
+name: release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '올릴 릴리스 태그 (예: v0.2.0)'
+        required: true
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - run: npm test
+      # 개발자 인증서가 없어 임시 서명(ad-hoc)만 한다. 처음 열 때 맥이 확인을 한 번 더 묻는다.
+      - run: npx electron-builder --mac --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: 릴리스에 올리기
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "팀 펫 $TAG" --notes "팀 펫 — Windows 는 TeamPet-Setup.exe, 맥은 dmg. 이미 설치했다면 펫이 알아서 알려 줘요."
+          gh release upload "$TAG" dist-mac/TeamPet-mac-*.dmg dist-mac/TeamPet-mac-*.zip --clobber
+  # Windows: the setup program, the portable zip, and the update every install fetches by itself
+  # (update.json + team-pet-update.zip, see server/release-update.js). After the Mac job, which
+  # makes the release.
+  windows:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: 테스트
+        shell: bash
+        run: node --test test/*.test.js
+      - name: Inno Setup 과 설치 파일에 넣을 Node
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress
+          New-Item -ItemType Directory -Force build/runtime | Out-Null
+          Invoke-WebRequest https://nodejs.org/dist/v20.18.1/win-x64/node.exe -OutFile build/runtime/node.exe
+      - run: node scripts/pack.js
+      - name: 릴리스에 올리기
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          cp "dist/팀-펫-설치.exe" dist/TeamPet-Setup.exe
+          cp "dist/팀-펫-압축판.zip" dist/TeamPet-Portable.zip
+          gh release upload "$TAG" dist/TeamPet-Setup.exe dist/TeamPet-Portable.zip dist/team-pet-update.zip dist/update.json --clobber
